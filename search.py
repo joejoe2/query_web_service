@@ -173,7 +173,6 @@ def search_singer_song(singer: str, song: str, mode: int) -> str:
     con.close()
 
     res = [x for x in r1 if x in r1 and x in r2]
-    print(res)
 
     if len(res) == 0:
         return packer.pack(packer.EMPTY, res)
