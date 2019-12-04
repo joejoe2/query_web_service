@@ -141,5 +141,43 @@ def search_song(song: str, mode: int) -> str:
     pass
 
 
-# print(search_song("思想起", 0)
+# print(search_song("思想起", 0))
 # print(search_song("???54", TAIWANESE_MODE))
+
+
+def search_singer_song(singer: str, song: str, mode: int) -> str:
+    """
+    return query result with singer and song name and mode in json string, the format plz refer to the main page
+
+    :param singer: string
+    :param song:  string
+    :param mode:  int
+    """
+    db = get_db(mode)
+    singer_list, song_list = get_list(mode)
+    cmp1 = compare.compare(singer_list, singer)
+    cmp2 = compare.compare(song_list, song)
+    r1 = []
+    r2 = []
+    con = sqlite3.connect(db)
+    for s2 in cmp2:
+        cursor = con.cursor()
+        cursor.execute('SELECT * FROM TEST WHERE SONG = "'+s2[0]+'"')
+        r1.extend(cursor.fetchall())
+        pass
+    for s1 in cmp1:
+        cursor = con.cursor()
+        cursor.execute('SELECT * FROM TEST WHERE SINGER = "' + s1[0] + '"')
+        r2.extend(cursor.fetchall())
+        pass
+    con.close()
+
+    res = [x for x in r1 if x in r1 and x in r2]
+    print(res)
+
+    if len(res) == 0:
+        return packer.pack(packer.EMPTY, res)
+    return packer.pack(packer.SUCCESS, res)
+    pass
+
+# print(search_singer_song("鄭","思想",0))

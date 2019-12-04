@@ -36,6 +36,7 @@ def index():
            "-----------------------------------------<br>" \
            "/search_singer?singer=...&mode=...<br>" \
            "/search_song?song=...&mode=...<br>" \
+           "/search_singer_and_song?singer=...&song=...&mode=...<br>" \
            "will return a json sting in {'status':'not supported'(or 'empty' or 'success'),'content':a json array}<br>" \
            "the json array is in [[song name,singer name,url,null],[song name,singer name,url,null],...] and it can be []<br>" \
            "notice that an url may be NULL or point to a suffix after https://www.youtube.com/watch?v="
@@ -86,6 +87,13 @@ def search_singer_and_song():
     singer = request.args.get("singer").strip()
     song = request.args.get("song").strip()
     mode = int(request.args.get("mode").strip())
+    if not support(mode):
+        # return not supported
+        return packer.pack(packer.NOT_SUPPORTED, None)
+        pass
+    else:
+        # return query result
+        return search.search_singer_song(singer, song, mode)
     pass
 
 
