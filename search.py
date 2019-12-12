@@ -6,6 +6,7 @@ import packer
 TAIWANESE_MODE = 0
 CHINESE_MODE = 1
 CHINESEPOP_MODE = 2
+# support list
 support_list = [TAIWANESE_MODE, CHINESE_MODE, CHINESEPOP_MODE]
 
 # setup matcher list
@@ -65,6 +66,8 @@ def get_list(mode: int) -> tuple:
     elif mode == CHINESEPOP_MODE:
         return cp_singer, cp_song
         pass
+    else:
+        raise Exception("invalid mode")
     pass
 
 
@@ -84,6 +87,8 @@ def get_db(mode: int) -> str:
     elif mode == CHINESEPOP_MODE:
         return 'chinesepop.db'
         pass
+    else:
+        raise Exception("invalid mode")
     pass
 
 
@@ -112,6 +117,7 @@ def search_singer(singer: str, mode: int) -> str:
     return packer.pack(packer.SUCCESS, res)
     pass
 # print(search_singer("伍佰", 0))
+# print(search_singer("記號",1))
 # print(compare.compare(t_singer, "伍百"))
 
 

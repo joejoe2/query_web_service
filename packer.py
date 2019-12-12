@@ -15,17 +15,23 @@ def pack(status: str, content: list) -> str:
     :return:  a json string with status and content
     """
     # init json obj
-    obj = {"status": status, "content": []}
+    obj = {"status": None, "content": []}
     if status == NOT_SUPPORTED:
         # for not supported json obj
+        obj["status"] = NOT_SUPPORTED
         pass
     elif status == EMPTY:
         # for empty json obj
+        obj["status"] = EMPTY
         pass
     elif status == SUCCESS:
         # for non empty query json obj
+        obj["status"] = SUCCESS
         obj["content"] = content
         pass
+    else:
+        raise Exception("invalid status")
+
     # return json string
     return json.dumps(obj)
     pass

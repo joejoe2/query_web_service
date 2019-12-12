@@ -84,6 +84,11 @@ def search_song():
 
 @app.route("/search_singer_and_song", methods=['GET'])
 def search_singer_and_song():
+    """
+    search with singer and song name
+
+    :return:  json string
+    """
     singer = request.args.get("singer").strip()
     song = request.args.get("song").strip()
     mode = int(request.args.get("mode").strip())
