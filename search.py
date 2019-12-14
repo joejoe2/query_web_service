@@ -149,6 +149,7 @@ def search_song(song: str, mode: int) -> str:
 
 # print(search_song("思想起", 0))
 # print(search_song("???54", TAIWANESE_MODE))
+# search_song("黑暗", 1)
 
 
 def search_singer_song(singer: str, song: str, mode: int) -> str:

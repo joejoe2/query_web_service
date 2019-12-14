@@ -8,6 +8,7 @@ app = Flask(__name__)
 port = int(os.environ.get("PORT", 8080))
 
 
+
 def support(mode):
     """
     check is the mode is supported
@@ -49,10 +50,11 @@ def search_singer():
 
     :return:  json string
     """
+
     # get param
     singer = request.args.get("singer").strip()
     mode = int(request.args.get("mode").strip())
-    if not support(mode):
+    if not support(mode) or singer == "":
         # return not supported
         return packer.pack(packer.NOT_SUPPORTED, None)
         pass
@@ -72,7 +74,7 @@ def search_song():
     # get param
     song = request.args.get("song").strip()
     mode = int(request.args.get("mode").strip())
-    if not support(mode):
+    if not support(mode) or song == "":
         # return not supported
         return packer.pack(packer.NOT_SUPPORTED, None)
         pass
@@ -92,7 +94,7 @@ def search_singer_and_song():
     singer = request.args.get("singer").strip()
     song = request.args.get("song").strip()
     mode = int(request.args.get("mode").strip())
-    if not support(mode):
+    if not support(mode) or singer == "" or song == "":
         # return not supported
         return packer.pack(packer.NOT_SUPPORTED, None)
         pass

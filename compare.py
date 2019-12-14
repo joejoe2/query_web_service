@@ -34,8 +34,11 @@ def compare(template: list, target: str) -> list:
         if item.find(target) != -1:  # if exactly contain
             res.append((item, seq.ratio()))
             pass
-        elif seq.ratio() >= threshold:  # else if similar enough
-            res.append((item, seq.ratio()))
+        elif seq.quick_ratio() >= 0.5:  # else if similar enough
+            temps = seq.ratio()
+            if temps >= threshold:
+                res.append((item, seq.ratio()))
+                pass
             pass
         pass
 
