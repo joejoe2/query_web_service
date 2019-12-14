@@ -140,7 +140,7 @@ def search_song(song: str, mode: int) -> str:
         res.extend(cursor.fetchall())
         pass
     con.close()
-
+    
     if len(res) == 0:
         return packer.pack(packer.EMPTY, res)
     return packer.pack(packer.SUCCESS, res)

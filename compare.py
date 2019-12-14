@@ -34,7 +34,7 @@ def compare(template: list, target: str) -> list:
         if item.find(target) != -1:  # if exactly contain
             res.append((item, seq.ratio()))
             pass
-        elif seq.quick_ratio() >= 0.5:  # else if similar enough
+        elif seq.quick_ratio() >= 0.7:  # else if similar enough
             temps = seq.ratio()
             if temps >= threshold:
                 res.append((item, seq.ratio()))
@@ -46,6 +46,9 @@ def compare(template: list, target: str) -> list:
     res.sort(key=lambda e: e[1], reverse=True)
     return res
     pass
+
+
+# print(SequenceMatcher(a="abc", b="avbo").quick_ratio())
 
 
 def pre_filter(indata: str) -> str:
