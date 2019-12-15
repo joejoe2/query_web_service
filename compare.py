@@ -1,5 +1,5 @@
-from difflib import SequenceMatcher
 import re
+from Levenshtein.StringMatcher import StringMatcher
 
 # const
 
@@ -22,9 +22,13 @@ def compare(template: list, target: str, ac : bool = False) -> list:
     :return: return a list of strings whose similarity >= threshold to  input in descending order with similarity value
     """
     # use a SequenceMatcher to compare target
-    seq = SequenceMatcher(lambda x: x == " ", target)
+    seq = StringMatcher(None)
+    seq.set_seq1(target)
     # a list of some result
     res = []
+
+    is_1 = True if len(target) == 1 else False
+
     # if similarity >= threshold , add to res
     if ac:
         for item in template:
@@ -33,8 +37,8 @@ def compare(template: list, target: str, ac : bool = False) -> list:
 
             # compute similarity
             seq.set_seq2(temp)
-            if item.find(target) != -1:  # if exactly contain
-                res.append((item, seq.ratio()))
+            if (not is_1 or abs(len(target)-len(temp)) <= 2) and item.find(target) != -1:  # if exactly contain
+                res.append((item, seq.quick_ratio()))
                 pass
             elif seq.quick_ratio() >= 0.66:  # else if similar enough
                 temps = seq.ratio()
@@ -63,7 +67,9 @@ def compare(template: list, target: str, ac : bool = False) -> list:
     pass
 
 
-# print(SequenceMatcher(a="456", b="45879").quick_ratio())
+# print(SequenceMatcher(a="456", b="v45879").quick_ratio())
+# print(StringMatcher("", "456", "4").quick_ratio())
+
 
 
 def pre_filter(indata: str) -> str:

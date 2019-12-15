@@ -92,6 +92,13 @@ def get_db(mode: int) -> str:
     pass
 
 
+def get_ac(mode: int, is_song: bool) -> bool:
+    if mode == 1 and is_song:
+        return True
+    return False
+    pass
+
+
 def search_singer(singer: str, mode: int) -> str:
     """
     return query result with singer name and mode in json string, the format plz refer to the main page
@@ -131,7 +138,7 @@ def search_song(song: str, mode: int) -> str:
     """
     db = get_db(mode)
     song_list = get_list(mode)[1]
-    cmp = compare.compare(song_list, song, True)
+    cmp = compare.compare(song_list, song, get_ac(mode, True))
     res = []
     con = sqlite3.connect(db)
     for sin in cmp:
@@ -163,7 +170,7 @@ def search_singer_song(singer: str, song: str, mode: int) -> str:
     db = get_db(mode)
     singer_list, song_list = get_list(mode)
     cmp1 = compare.compare(singer_list, singer)
-    cmp2 = compare.compare(song_list, song, True)
+    cmp2 = compare.compare(song_list, song, get_ac(mode, True))
     r1 = []
     r2 = []
     con = sqlite3.connect(db)
