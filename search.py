@@ -116,7 +116,7 @@ def search_singer(singer: str, mode: int) -> str:
         return packer.pack(packer.EMPTY, res)
     return packer.pack(packer.SUCCESS, res)
     pass
-# print(search_singer("伍佰", 0))
+# print(search_singer("伍百", 0))
 # print(search_singer("記號",1))
 # print(compare.compare(t_singer, "伍百"))
 
@@ -131,7 +131,7 @@ def search_song(song: str, mode: int) -> str:
     """
     db = get_db(mode)
     song_list = get_list(mode)[1]
-    cmp = compare.compare(song_list, song)
+    cmp = compare.compare(song_list, song, True)
     res = []
     con = sqlite3.connect(db)
     for sin in cmp:
@@ -149,7 +149,7 @@ def search_song(song: str, mode: int) -> str:
 
 # print(search_song("思想起", 0))
 # print(search_song("???54", TAIWANESE_MODE))
-# search_song("黑暗", 1)
+# print(search_song("黑暗", 1))
 
 
 def search_singer_song(singer: str, song: str, mode: int) -> str:
@@ -163,7 +163,7 @@ def search_singer_song(singer: str, song: str, mode: int) -> str:
     db = get_db(mode)
     singer_list, song_list = get_list(mode)
     cmp1 = compare.compare(singer_list, singer)
-    cmp2 = compare.compare(song_list, song)
+    cmp2 = compare.compare(song_list, song, True)
     r1 = []
     r2 = []
     con = sqlite3.connect(db)

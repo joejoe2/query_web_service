@@ -12,10 +12,11 @@ pattern2 = "[[{(].*[)}]"
 repl = ""
 
 
-def compare(template: list, target: str) -> list:
+def compare(template: list, target: str, ac : bool = False) -> list:
     """
     for error correctness, return a list of strings whose similarity >= threshold to target in template list ,use a SequenceMatcher
 
+    :param ac:  specify to use quick ratio
     :param template:  a list
     :param target:  a input string
     :return: return a list of strings whose similarity >= threshold to  input in descending order with similarity value
@@ -25,22 +26,36 @@ def compare(template: list, target: str) -> list:
     # a list of some result
     res = []
     # if similarity >= threshold , add to res
-    for item in template:
-        # pre process ...
-        temp = pre_filter(item)
+    if ac:
+        for item in template:
+            # pre process ...
+            temp = pre_filter(item)
 
-        # compute similarity
-        seq.set_seq2(temp)
-        if item.find(target) != -1:  # if exactly contain
-            res.append((item, seq.ratio()))
-            pass
-        elif seq.quick_ratio() >= 0.7:  # else if similar enough
-            temps = seq.ratio()
-            if temps >= threshold:
+            # compute similarity
+            seq.set_seq2(temp)
+            if item.find(target) != -1:  # if exactly contain
                 res.append((item, seq.ratio()))
                 pass
+            elif seq.quick_ratio() >= 0.66:  # else if similar enough
+                temps = seq.ratio()
+                if temps >= threshold:
+                    res.append((item, seq.ratio()))
+                    pass
+                pass
             pass
-        pass
+    else:
+        for item in template:
+            # pre process ...
+            temp = pre_filter(item)
+
+            # compute similarity
+            seq.set_seq2(temp)
+            if item.find(target) != -1:  # if exactly contain
+                res.append((item, seq.ratio()))
+                pass
+            elif seq.ratio() >= threshold:  # else if similar enough
+                res.append((item, seq.ratio()))
+            pass
 
     # sort res by similarity in descending order
     res.sort(key=lambda e: e[1], reverse=True)
@@ -48,7 +63,7 @@ def compare(template: list, target: str) -> list:
     pass
 
 
-# print(SequenceMatcher(a="abc", b="avbo").quick_ratio())
+# print(SequenceMatcher(a="456", b="45879").quick_ratio())
 
 
 def pre_filter(indata: str) -> str:
