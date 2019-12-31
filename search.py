@@ -138,13 +138,33 @@ def search_song(song: str, mode: int) -> str:
     """
     db = get_db(mode)
     song_list = get_list(mode)[1]
-    cmp = compare.compare(song_list, song, get_ac(mode, True))
     res = []
+    t = []
+    f = []
     con = sqlite3.connect(db)
-    for sin in cmp:
-        cursor = con.cursor()
-        cursor.execute('SELECT * FROM TEST WHERE SONG = "'+sin[0]+'"')
-        res.extend(cursor.fetchall())
+
+    if mode == CHINESE_MODE:
+        for s in song:
+            cursor = con.cursor()
+            cursor.execute('SELECT * FROM TEST WHERE SONG LIKE "%' + s + '%"')
+            t.extend([x for x in cursor.fetchall()])
+            pass
+        t = list(dict.fromkeys(t))
+        f = [x[1] for x in t]
+        f = compare.compare(f, song, get_ac(mode, True))
+        for o in f:
+            for n in t:
+                if o[0] == n[1]:
+                    res.append(n)
+                    break
+        pass
+    else:
+        cmp = compare.compare(song_list, song, get_ac(mode, True))
+        for sin in cmp:
+            cursor = con.cursor()
+            cursor.execute('SELECT * FROM TEST WHERE SONG = "'+sin[0]+'"')
+            res.extend(cursor.fetchall())
+            pass
         pass
     con.close()
 
@@ -193,4 +213,4 @@ def search_singer_song(singer: str, song: str, mode: int) -> str:
     return packer.pack(packer.SUCCESS, res)
     pass
 
-# print(search_singer_song("鄭","思想",0))
+# print(search_singer_song("五","黑暗",1))
