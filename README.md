@@ -1,6 +1,6 @@
 # query_web_service
 
-welcome to query web service
+welcome to query web service, this is service for serching songs by name of singer or song using sqlite and support missing some part of query key word by comparing the word 's distance
 
 mode 0 is taiwanese
 
