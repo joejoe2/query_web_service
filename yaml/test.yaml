@@ -1,0 +1,87 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ka-ingress
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+        - path: /chinese_popular_song_service
+          backend:
+            serviceName: chinese-popular-song-service
+            servicePort: 8000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chinese-popular-song-service
+  labels:
+    app: chinese-popular-song-service
+spec:
+  ports:
+    - port: 8000
+  selector:
+    app: chinese-popular-song-pod
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-pv-1
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadOnlyMany
+  hostPath:
+    path: /data/db
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ka-pv-claim
+  labels:
+    app: ka-pv-claim
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chinese-popular-song-deployment
+  labels:
+    app: chinese-popular-song-deployment
+spec:
+  selector:
+    matchLabels:
+      app: chinese-popular-song-pod
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: chinese-popular-song-pod
+    spec:
+      containers:
+      - image: joejoe2/chinese_popular_song_service
+        name: chinese-popular-song
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - name: ka-persistent-storage
+          mountPath: /app/db/
+      volumes:
+      - name: ka-persistent-storage
+        persistentVolumeClaim:
+          claimName: ka-pv-claim
+
