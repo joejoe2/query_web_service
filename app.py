@@ -1,12 +1,12 @@
 from flask import Flask, request
 import os
 import search
-import packer
+import response
+
 
 # setup flask
 app = Flask(__name__)
 port = int(os.environ.get("PORT", 8080))
-
 
 
 def support(mode):
@@ -16,7 +16,7 @@ def support(mode):
     :param mode:  int
     :return:  support or not
     """
-    if mode not in search.support_list:
+    if mode not in search.supported_modes:
         return False
         pass
     return True
@@ -56,11 +56,11 @@ def search_singer():
     mode = int(request.args.get("mode").strip())
     if not support(mode) or singer == "":
         # return not supported
-        return packer.pack(packer.NOT_SUPPORTED, None)
+        return response.pack(response.NOT_SUPPORTED, None)
         pass
     else:
         # return query result
-        return search.search_singer(singer, mode)
+        return search.search_with_singer(singer, mode)
     pass
 
 
@@ -76,11 +76,11 @@ def search_song():
     mode = int(request.args.get("mode").strip())
     if not support(mode) or song == "":
         # return not supported
-        return packer.pack(packer.NOT_SUPPORTED, None)
+        return response.pack(response.NOT_SUPPORTED, None)
         pass
     else:
         # return query result
-        return search.search_song(song, mode)
+        return search.search_with_song(song, mode)
     pass
 
 
@@ -96,11 +96,11 @@ def search_singer_and_song():
     mode = int(request.args.get("mode").strip())
     if not support(mode) or singer == "" or song == "":
         # return not supported
-        return packer.pack(packer.NOT_SUPPORTED, None)
+        return response.pack(response.NOT_SUPPORTED, None)
         pass
     else:
         # return query result
-        return search.search_singer_song(singer, song, mode)
+        return search.search_with_singer_and_song(singer, song, mode)
     pass
 
 

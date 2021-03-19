@@ -8,10 +8,10 @@ SUCCESS = "success"
 
 def pack(status: str, content: list) -> str:
     """
-    use to pack the query result and query status into json string, the format plz refer to main page
+    use to pack the content and  status into json string, the format plz refer to main page
 
-    :param status:  string
-    :param content: query result
+    :param status:  status value
+    :param content: content value
     :return:  a json string with status and content
     """
     # init json obj
